@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {text-align:center; font-family:Arial; background:#f5f5f5;}
+
+.header {
+background: linear-gradient(90deg,#ff0057,#6a00ff);
+color:white; padding:15px;
+}
+
+.logo { width:720px; margin-top:20px;}
+
+.btn {
+display:block;
+width:300px;
+margin:10px auto;
+padding:12px;
+background:#ddd;
+border-radius:10px;
+text-decoration:none;
+color:black;
+font-weight:bold;
+}
+
+.social-left {
+position:fixed;
+bottom:20px;
+left:20px;
+}
+
+.social-right {
+position:fixed;
+bottom:20px;
+right:20px;
+}
+
+.social-left img,
+.social-right img {
+width:60px;
+margin:5px;
+cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">CATÁLOGO DE PRODUCTOS</div>
+
+<img src="/static/img/Logo/logo.png" class="logo">
+
+<a href="/catalogo/alarmas" class="btn">ALARMAS</a>
+<a href="/catalogo/control_acceso" class="btn">CONTROL DE ACCESO</a>
+<a href="/catalogo/deteccion_incendios" class="btn">DETECCIÓN DE INCENDIOS</a>
+<a href="/catalogo/energia" class="btn">ENERGÍA</a>
+<a href="/catalogo/redes" class="btn">REDES</a>
+<a href="/catalogo/telemetria" class="btn">TELEMETRÍA</a>
+<a href="/catalogo/videovigilancia" class="btn">VIDEOVIGILANCIA</a>
+
+<div class="social-left">
+
+<!-- 🌐 WEB -->
+<a href="https://www.amarocservices.com" target="_blank">
+<img src="/static/img/Logo/web.png">
+</a>
+
+<!-- 👍 FACEBOOK -->
+<a href="https://www.facebook.com/profile.php?id=61566330481089" target="_blank">
+<img src="/static/img/Logo/facebook.png">
+</a>
+
+</div>
+
+<div class="social-right">
+
+<!-- 📲 WHATSAPP -->
+<a href="https://wa.me/526624611574" target="_blank">
+<img src="/static/img/Logo/whatsapp.png">
+</a>
+
+</div>
+
+</body>
+</html>

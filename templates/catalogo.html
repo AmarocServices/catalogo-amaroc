@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {margin:0; font-family:Arial;}
+
+.header {
+display:flex;
+justify-content:center;
+align-items:center;
+background: linear-gradient(90deg,#ff0057,#6a00ff);
+color:white;
+padding:15px;
+text-align:center;
+position:fixed;
+top:0;
+width:100%;
+z-index:1000;
+}
+
+.cart {
+position:absolute;
+left:30px;
+top:10px;
+font-size:20px;
+cursor:pointer;
+}
+
+.menu {
+position:absolute;
+right:45px;
+top:8px;
+font-size:25px;
+cursor:pointer;
+}
+
+.grid {
+display:grid;
+grid-template-columns: repeat(2,1fr);
+gap:20px;
+padding:20px;
+margin-top:90px;
+margin-left:60px;
+margin-right:20px;
+}
+
+.card {background:#fff; padding:15px; border-radius:10px;}
+
+.card img {width:100%; height:200px; object-fit:contain;}
+
+.precio {color:green; font-weight:bold;}
+.old {text-decoration:line-through; color:gray;}
+
+.sidebar {
+position:fixed;
+right:-300px;
+top:1;
+width:250px;
+height:100%;
+background:white;
+transition:0.3s;
+padding:20px;
+}
+
+.sidebar a {
+display:block;
+margin:10px 0;
+padding:12px;
+text-align:center;
+text-decoration:none;
+font-weight:bold;
+border-radius:10px;
+background: linear-gradient(90deg,#ff0057,#6a00ff);
+color:white;
+transition:0.3s;
+}
+
+.sidebar a:hover {
+background: linear-gradient(90deg,#6a00ff,#ff0057);
+transform: scale(1.05);
+}
+
+.sidebar a:active {
+transform: scale(0.95);
+}
+
+.sidebar a.activo {
+background:black;
+}
+
+.carrito {
+position:fixed;
+left:-320px;
+top:70px;
+width:300px;
+height:100%;
+background:white;
+transition:0.3s;
+padding:15px;
+overflow:auto;
+}
+
+.btn {
+background:#6a00ff;
+color:white;
+border:none;
+padding:6px 10px;
+margin-top:5px;
+cursor:pointer;
+}
+</style>
+
+<script>
+let carrito=[];
+let stockOriginal={};
+
+/* 🔥 FORMATO CON COMAS */
+function formato(num){
+return num.toLocaleString('en-US',{minimumFractionDigits:2});
+}
+
+function toggleMenu(){
+let m=document.getElementById("menu");
+m.style.right=(m.style.right=="0px")?"-300px":"0px";
+}
+
+function toggleCarrito(){
+let c=document.getElementById("carrito");
+c.style.left=(c.style.left=="0px")?"-320px":"0px";
+render();
+}
+
+function agregar(nombre,precio,stock){
+if(!stockOriginal[nombre]){
+stockOriginal[nombre]=stock;
+}
+let item=carrito.find(x=>x.nombre==nombre);
+if(stockOriginal[nombre]<=0){
+alert("AGOTADO");
+return;
+}
+if(item){
+item.cantidad++;
+}else{
+carrito.push({nombre,precio,cantidad:1});
+}
+stockOriginal[nombre]--;
+render();
+}
+
+function cambiar(nombre,d){
+let item=carrito.find(x=>x.nombre==nombre);
+if(d>0){
+if(stockOriginal[nombre]<=0){
+alert("Sin stock");
+return;
+}
+item.cantidad++;
+stockOriginal[nombre]--;
+}else{
+item.cantidad--;
+stockOriginal[nombre]++;
+}
+if(item.cantidad<=0){
+carrito=carrito.filter(x=>x.nombre!=nombre);
+}
+render();
+}
+
+function eliminar(nombre){
+let item=carrito.find(x=>x.nombre==nombre);
+if(item){
+stockOriginal[nombre]+=item.cantidad;
+}
+carrito=carrito.filter(x=>x.nombre!=nombre);
+render();
+}
+
+function vaciar(){
+carrito.forEach(p=>{
+stockOriginal[p.nombre]+=p.cantidad;
+});
+carrito=[];
+render();
+}
+
+function render(){
+let html=""; 
+let total=0; 
+let totalItems=0;
+
+carrito.forEach(p=>{
+let sub=p.precio*p.cantidad;
+total+=sub;
+totalItems+=p.cantidad;
+
+html+=`
+<div>
+<b>${p.nombre}</b><br>
+<button onclick="cambiar('${p.nombre}',-1)">-</button>
+${p.cantidad}
+<button onclick="cambiar('${p.nombre}',1)">+</button>
+<br>$ ${formato(sub)}
+<span onclick="eliminar('${p.nombre}')" style="color:red;cursor:pointer;">🗑</span>
+<hr>
+</div>`;
+});
+
+html+=`
+<h3>Total: $ ${formato(total)}</h3>
+<button class="btn" onclick="comprar()">📲 WhatsApp</button>
+<br>
+<button class="btn" onclick="vaciar()">Vaciar</button>
+<br>
+<button class="btn" onclick="toggleCarrito()">Cerrar</button>
+`;
+
+document.getElementById("contenido").innerHTML=html;
+document.getElementById("contador").innerText=totalItems;
+
+Object.keys(stockOriginal).forEach(nombre=>{
+let el=document.getElementById("stock-"+nombre);
+if(el){
+let s=stockOriginal[nombre];
+if(s<=0){
+el.innerHTML="<span style='color:red;'>AGOTADO</span>";
+}else{
+el.innerHTML="Stock: "+s;
+}
+}
+});
+}
+
+function comprar(){
+let msg="Hola, quiero comprar:%0A";
+carrito.forEach(p=>{
+msg+=`${p.nombre} x${p.cantidad} - $${formato(p.precio*p.cantidad)}%0A`;
+});
+window.open(`https://wa.me/526624611574?text=${msg}`);
+}
+</script>
+</head>
+
+<body>
+
+<div class="header">
+<span class="cart" onclick="toggleCarrito()">🛒 <span id="contador">0</span></span>
+{{ titulo }}
+<span class="menu" onclick="toggleMenu()">☰</span>
+</div>
+
+<div id="menu" class="sidebar">
+<a href="/">INICIO</a>
+<a href="/catalogo/alarmas">ALARMAS</a>
+<a href="/catalogo/control_acceso">CONTROL DE ACCESO</a>
+<a href="/catalogo/deteccion_incendios">DETECCIÓN</a>
+<a href="/catalogo/energia">ENERGÍA</a>
+<a href="/catalogo/redes">REDES</a>
+<a href="/catalogo/telemetria">TELEMETRÍA</a>
+<a href="/catalogo/videovigilancia">VIDEOVIGILANCIA</a>
+</div>
+
+<div id="carrito" class="carrito">
+<h3>Carrito</h3>
+<div id="contenido"></div>
+</div>
+
+<div class="grid">
+
+{% for p in productos %}
+
+<script>
+stockOriginal["{{p.modelo}}"]={{p.stock}};
+</script>
+
+<div class="card">
+
+<img src="{{p.imagen}}">
+
+<h3>{{p.modelo}}</h3>
+
+<p><b>Marca:</b> {{p.marca}}</p>
+<p><b>Estado:</b> {{p.estado}}</p>
+
+<p>{{p.descripcion}}</p>
+
+<p class="old">$ {{ "{:,.2f}".format(p.precio) }}</p>
+<p class="precio">$ {{ "{:,.2f}".format(p.final) }}</p>
+
+<p id="stock-{{p.modelo}}">Stock: {{p.stock}}</p>
+
+{% if p.stock > 0 %}
+<button class="btn"
+onclick="agregar('{{p.modelo}}',{{p.final}},{{p.stock}})">
+Agregar
+</button>
+{% else %}
+<p style="color:red;">AGOTADO</p>
+{% endif %}
+
+</div>
+
+{% endfor %}
+
+</div>
+
+</body>
+</html>
