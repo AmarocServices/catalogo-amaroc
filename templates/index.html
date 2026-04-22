@@ -2,7 +2,15 @@
 <html>
 <head>
 <style>
-body {text-align:center; font-family:Arial; background:#f5f5f5;}
+    * {
+    box-sizing: border-box;
+}
+body {
+    text-align:center;
+    font-family:Arial;
+    background:#f5f5f5;
+    margin:0;
+}
 
 .header {
 background: linear-gradient(90deg,#ff0057,#6a00ff);
@@ -14,13 +22,28 @@ color:white; padding:15px;
 .btn {
 display:block;
 width:300px;
-margin:10px auto;
-padding:12px;
-background:#ddd;
-border-radius:10px;
+margin:12px auto;
+padding:14px;
+background: linear-gradient(90deg,#ff0057,#6a00ff);
+border-radius:12px;
 text-decoration:none;
-color:black;
+color:white;
 font-weight:bold;
+font-size:15px;
+transition: all 0.3s ease;
+box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* EFECTO HOVER */
+.btn:hover {
+transform: scale(1.05);
+opacity:0.9;
+}
+
+/* EFECTO CLICK */
+.btn:active {
+transform: scale(0.97);
+box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 .social-left {
@@ -40,6 +63,48 @@ right:20px;
 width:60px;
 margin:5px;
 cursor:pointer;
+}
+
+/* 🔥 AJUSTE PARA CELULAR */
+@media (max-width: 768px) {
+
+    /* LOGO MÁS PEQUEÑO */
+    .logo {
+        width: 90%;
+        max-width: 320px;
+        margin-top: 15px;
+    }
+
+    /* BOTONES MÁS GRANDES */
+    .btn {
+        width: 90%;
+        padding: 15px;
+        font-size: 16px;
+        border-radius: 12px;
+    }
+
+    /* HEADER MÁS COMPACTO */
+    .header {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    /* ICONOS MÁS PEQUEÑOS Y MEJOR POSICIÓN */
+    .social-left img,
+    .social-right img {
+        width: 50px;
+    }
+
+    .social-left {
+        bottom: 10px;
+        left: 10px;
+    }
+
+    .social-right {
+        bottom: 10px;
+        right: 10px;
+    }
+
 }
 </style>
 </head>
